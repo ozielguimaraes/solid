@@ -1,5 +1,5 @@
-﻿using System;
-using Daycoval.Solid.Domain.Entidades;
+﻿using Daycoval.Solid.Domain.Entidades;
+using System;
 
 namespace Daycoval.Solid.Domain.Services
 {
@@ -20,12 +20,23 @@ namespace Daycoval.Solid.Domain.Services
 
         public void Dispose()
         {
-            Login = string.Empty;
-            Senha = string.Empty;
-            NomeImpresso = string.Empty;
-            Valor = 0M;
-            MesExpiracao = 0;
-            AnoExpiracao = 0;
+            //https://docs.microsoft.com/en-us/visualstudio/code-quality/ca1816-call-gc-suppressfinalize-correctly?view=vs-2017
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Login = string.Empty;
+                Senha = string.Empty;
+                NomeImpresso = string.Empty;
+                Valor = 0M;
+                MesExpiracao = 0;
+                AnoExpiracao = 0;
+            }
         }
     }
 }

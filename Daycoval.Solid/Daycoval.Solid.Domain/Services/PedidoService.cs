@@ -5,7 +5,7 @@ using Daycoval.Solid.Domain.Entidades;
 
 namespace Daycoval.Solid.Domain.Services
 {
-    public class Pedido
+    public class PedidoService
     {
         public void EfetuarPedido(Carrinho carrinho, DetalhePagamento detalhePagamento, bool notificarClienteEmail,
             bool notificarClienteSms)
@@ -42,17 +42,17 @@ namespace Daycoval.Solid.Domain.Services
             if (detalhePagamento.FormaPagamento.Equals(FormaPagamento.CartaoCredito) ||
                 detalhePagamento.FormaPagamento.Equals(FormaPagamento.CartaoDebito))
             {
-                using (var gatewayPatamento = new GatewayPagamentoService())
+                using (var gatewayPagamento = new GatewayPagamentoService())
                 {
-                    gatewayPatamento.Login = "login";
-                    gatewayPatamento.Senha = "senha";
-                    gatewayPatamento.FormaPagamentoCartao = (FormaPagamentoCartao) detalhePagamento.FormaPagamento;
-                    gatewayPatamento.NomeImpresso = detalhePagamento.NomeImpressoCartao;
-                    gatewayPatamento.AnoExpiracao = detalhePagamento.AnoExpiracao;
-                    gatewayPatamento.MesExpiracao = detalhePagamento.MesExpiracao;
-                    gatewayPatamento.Valor = carrinho.ValorTotalPedido;
+                    gatewayPagamento.Login = "login";
+                    gatewayPagamento.Senha = "senha";
+                    gatewayPagamento.FormaPagamentoCartao = (FormaPagamentoCartao) detalhePagamento.FormaPagamento;
+                    gatewayPagamento.NomeImpresso = detalhePagamento.NomeImpressoCartao;
+                    gatewayPagamento.AnoExpiracao = detalhePagamento.AnoExpiracao;
+                    gatewayPagamento.MesExpiracao = detalhePagamento.MesExpiracao;
+                    gatewayPagamento.Valor = carrinho.ValorTotalPedido;
 
-                    gatewayPatamento.EfetuarPagamento();
+                    gatewayPagamento.EfetuarPagamento();
                 }
 
                 InformarPagamento(carrinho);
