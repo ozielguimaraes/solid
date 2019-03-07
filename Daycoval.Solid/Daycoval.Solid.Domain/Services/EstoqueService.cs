@@ -1,8 +1,9 @@
 ﻿using Daycoval.Solid.Domain.Entidades;
+using Daycoval.Solid.Domain.Services.Interfaces;
 
 namespace Daycoval.Solid.Domain.Services
 {
-    public class EstoqueService
+    public class EstoqueService : IEstoqueService
     {
         public void SolicitarProduto(Produto produto)
         {

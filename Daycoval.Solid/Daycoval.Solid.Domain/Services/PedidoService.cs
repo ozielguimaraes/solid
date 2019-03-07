@@ -2,10 +2,11 @@
 using System.Net.Mail;
 using System.Runtime.InteropServices;
 using Daycoval.Solid.Domain.Entidades;
+using Daycoval.Solid.Domain.Services.Interfaces;
 
 namespace Daycoval.Solid.Domain.Services
 {
-    public class PedidoService
+    public class PedidoService : IPedidoService
     {
         public void EfetuarPedido(Carrinho carrinho, DetalhePagamento detalhePagamento, bool notificarClienteEmail,
             bool notificarClienteSms)
@@ -111,9 +112,7 @@ namespace Daycoval.Solid.Domain.Services
                 if (!string.IsNullOrWhiteSpace(carrinho.Cliente.Celular))
                 {
                     var smsService = new SmsService();
-                    smsService.Mensagem = "Obrigado por sua compra";
-                    smsService.Celular = carrinho.Cliente.Celular;
-                    smsService.EnviarSms();
+                    smsService.EnviarSms(carrinho.Cliente.Celular, "Obrigado por sua compra");
                 }
             }
         }
