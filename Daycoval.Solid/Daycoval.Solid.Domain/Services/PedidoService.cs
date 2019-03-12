@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Mail;
 using System.Runtime.InteropServices;
 using Daycoval.Solid.Domain.Entidades;
@@ -45,9 +45,9 @@ namespace Daycoval.Solid.Domain.Services
             {
                 using (var gatewayPagamento = new GatewayPagamentoService())
                 {
-                    gatewayPagamento.Login = "login";
-                    gatewayPagamento.Senha = "senha";
-                    gatewayPagamento.FormaPagamentoCartao = (FormaPagamentoCartao) detalhePagamento.FormaPagamento;
+                    gatewayPagamento.Login = "login"; //Colocar em um arquivo de configuração
+                    gatewayPagamento.Senha = "senha"; //Colocar em um arquivo de configuração
+                    gatewayPagamento.FormaPagamentoCartao = (FormaPagamentoCartao)detalhePagamento.FormaPagamento;
                     gatewayPagamento.NomeImpresso = detalhePagamento.NomeImpressoCartao;
                     gatewayPagamento.AnoExpiracao = detalhePagamento.AnoExpiracao;
                     gatewayPagamento.MesExpiracao = detalhePagamento.MesExpiracao;
@@ -96,14 +96,8 @@ namespace Daycoval.Solid.Domain.Services
             {
                 if (!string.IsNullOrWhiteSpace(carrinho.Cliente.Email))
                 {
-                    using (var msg = new MailMessage("tiago.dantas@bancodaycoval.com.br", carrinho.Cliente.Email))
-                    using (var smtp = new SmtpClient("servidor.smtp"))
-                    {
-                        msg.Subject = "Dados da sua compra";
-                        msg.Body = $"Obrigado por efetuar sua compra conosco.";
-
-                        smtp.Send(msg);
-                    }
+                    var emailService = new EmailService();
+                    emailService.EnviarEmailNovaCompra(carrinho.Cliente.Nome, carrinho.Cliente.Email);
                 }
             }
 
