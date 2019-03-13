@@ -1,8 +1,7 @@
-using System;
-using System.Net.Mail;
-using System.Runtime.InteropServices;
-using Daycoval.Solid.Domain.Entidades;
+﻿using Daycoval.Solid.Domain.Entidades;
+using Daycoval.Solid.Domain.Patterns.Strategy.TipoProduto;
 using Daycoval.Solid.Domain.Services.Interfaces;
+using System.Runtime.InteropServices;
 
 namespace Daycoval.Solid.Domain.Services
 {
@@ -11,33 +10,19 @@ namespace Daycoval.Solid.Domain.Services
         public void EfetuarPedido(Carrinho carrinho, DetalhePagamento detalhePagamento, bool notificarClienteEmail,
             bool notificarClienteSms)
         {
+            TipoProdutoStrategy tipoProdutoStrategy;
             foreach (var produto in carrinho.Produtos)
             {
                 if (produto.TipoProduto == TipoProduto.Alimentos)
-                {
-                    produto.ValorImposto = produto.Valor * 0.05M;
-                    carrinho.ValorTotalPedido += (produto.Valor + produto.ValorImposto) * produto.Quantidade;
-                }
-                else
-                {
-                    if (produto.TipoProduto == TipoProduto.Eletronico)
-                    {
-                        produto.ValorImposto = produto.Valor * 0.15M;
-                        carrinho.ValorTotalPedido += (produto.Valor + produto.ValorImposto) * produto.Quantidade;
-                    }
-                    else
-                    {
-                        if (produto.TipoProduto == TipoProduto.Superfulos)
-                        {
-                            produto.ValorImposto = produto.Valor * 0.20M;
-                            carrinho.ValorTotalPedido += (produto.Valor + produto.ValorImposto) * produto.Quantidade;
-                        }
-                        else
-                        {
-                            throw new ArgumentException("O tipo de produto informado não está disponível.");
-                        }
-                    }
-                }
+                    tipoProdutoStrategy = new TipoProdutoAlimentos();
+
+                else if (produto.TipoProduto == TipoProduto.Eletronico)
+                    tipoProdutoStrategy = new TipoProdutoEletronico();
+
+                else tipoProdutoStrategy = new TipoProdutoSuperfulos();
+
+                produto.ValorImposto = tipoProdutoStrategy.CalcularValorImposto(produto.Valor);
+                carrinho.RecalcularTotalPedido(produto);
             }
 
             if (detalhePagamento.FormaPagamento.Equals(FormaPagamento.CartaoCredito) ||

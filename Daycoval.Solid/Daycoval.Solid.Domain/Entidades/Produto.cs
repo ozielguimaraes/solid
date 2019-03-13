@@ -7,6 +7,5 @@
         public int Quantidade { get; set; }
         public decimal ValorImposto { get; set; }
         public TipoProduto TipoProduto { get; set; }
-        
     }
 }
