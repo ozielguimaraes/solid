@@ -17,8 +17,8 @@ namespace Daycoval.Solid.Domain.Tests.Patterns.Strategy.TipoProduto
                 Valor = 15
             };
 
-            var asds = new TipoProdutoAlimentos();
-            produto.ValorImposto = asds.CalcularValorImposto(produto.Valor);
+            var tipoProdutoStrategy = new TipoProdutoAlimentos();
+            produto.ValorImposto = tipoProdutoStrategy.CalcularValorImposto(produto.Valor);
 
             Assert.True(produto.ValorImposto == 0.75m);
         }
